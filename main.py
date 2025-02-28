@@ -12,7 +12,8 @@ if "pages" not in st.session_state:
 page_login = st.Page(page="pages/login.py")
 page_cliente = st.Page(page="pages/cliente.py")
 page_imovel = st.Page(page="pages/imovel.py")
-pg = st.navigation(pages=[page_imovel, page_login, page_cliente])
+page_cadastro = st.Page(page="pages/cadastro.py")
+pg = st.navigation(pages=[page_imovel, page_login, page_cliente, page_cadastro])
 pg.run()
 
 url = st.secrets["my_secrets"]["url"]
@@ -89,13 +90,10 @@ while True:
     else:
         break
 
-lista = [cod, 'Leonardo', '11998548715', 'Mirim', '425000', 'Com piscina',
+lista = [cod, 'Ana', '11998548715', 'Mirim', '425000', 'Com piscina',
          f"{datetime.datetime.today().now()}", f"{datetime.datetime.today().now()}",
          f"{datetime.datetime.today().now()}"]
 # inserir_dados(lista)
-
-
-st.dataframe(df)
 
 
 
