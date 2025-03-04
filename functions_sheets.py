@@ -35,6 +35,7 @@ def delete(row: int):
     worksheet.delete_rows(row)
 
 # Exemplo de uso
-create(["Julia", "maria@email.com", "Ativo"])
+# create(["Julia", "maria@email.com", "Ativo"])
+
 print(read())
 
