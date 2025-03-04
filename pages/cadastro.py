@@ -8,6 +8,8 @@ from oauth2client.service_account import ServiceAccountCredentials
 import functions
 import time
 import twilio
+import functions_sheets
+from google.oauth2.service_account import Credentials
 
 popover = st.popover(label="⋘")
 
@@ -58,9 +60,9 @@ with st.expander(label="Cadastrar cliente"):
     data_update = datetime.datetime.today().now()
     data_agenda = ""
     st.write("cliente")
-    lista = [cod, nome, telefone, bairro, valor, descricao, data_in, data_update, data_agenda]
-    # if st.button(label="Cadastrar cliente", key="cadastrar_cliente"):
-    #     functions.inserir_dados(lista)
+    lista = [cod, nome, telefone, bairro, valor, descricao, str(data_in), str(data_update), str(data_agenda)]
+    if st.button(label="Cadastrar cliente", key="cadastrar_cliente"):
+        functions_sheets.create(lista)
 
 with st.expander(label="Cadastrar Imóvel"):
     st.write("Imóvel")

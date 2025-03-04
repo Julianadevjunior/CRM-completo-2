@@ -8,12 +8,14 @@ from oauth2client.service_account import ServiceAccountCredentials
 import functions
 import time
 import twilio
+from google.oauth2.service_account import Credentials
 
-col1, col2, col3 = st.columns([10, 10, 3])
-with col3:
-    st.page_link(label='Sair',page='pages/login.py')
-with col1:
+popover = st.popover(label="⇶")
+
+with popover:
     st.page_link(label='Cadastros',page='pages/cadastro.py')
+    st.page_link(label='Sair', page='pages/login.py')
+
 tamanho = 30
 cor = 'red'
 negrito = 'bold'
