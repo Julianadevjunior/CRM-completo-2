@@ -7,6 +7,10 @@ import twilio
 import requests
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from PIL import Image
+from io import BytesIO
+
+import functions_sheets
 
 url = st.secrets["my_secrets"]["url"]
 tabela_df = st.secrets["my_secrets"]["tabela_df"]
@@ -297,5 +301,84 @@ def inserir_dados(lista):
     sheet.append_row(nova_linha)
 
     print("Informação adicionada com sucesso!")
+
+
+
+def cadastrar_imovel():
+    def gerador_cod():
+        lista_cod = []
+        df_imoveis = functions_sheets.read(pagina=2)
+        for cod in range(0, len(df_imoveis)):
+            lista_cod.append(df_imoveis[cod]["cod"])
+
+        cod = 0
+        while True:
+            if cod in lista_cod:
+                cod += 1
+            else:
+                break
+        return cod
+
+    cod_imovel = gerador_cod()
+    cod = st.text(f"Cod: {cod_imovel} ______________________{datetime.datetime.today().now().strftime("%d/%m/%Y - %H:%M")}")
+    with st.container(border=True, key="container 1"):
+        residencial = st.text_input(label="Residencial", key="residencial")
+        complemento = st.text_input(label="Complemento", key="complemento")
+        responsável = st.text_input(label="Responsável", key="resposavel")
+        telefone = st.text_input(label="Telefone", key="telefone")
+
+    with st.container(border=True, key="container 2"):
+        col1, col2 = st.columns([2, 2])
+        with col1:
+            cep = st.text_input(label="CEP", key="cep")
+            numero = st.text_input(label="N°", key="numero")
+        with col2:
+            mar = st.text_input(label="Distâcia do mar", key="mar")
+            area = st.text_input(label="Area", key="area")
+
+    with st.container(border=True, key="container 3"):
+        quartos = st.radio(label="Quartos", options=[1, 2, 3, 4, 5], key="quartos", horizontal=True)
+        vagas = st.radio(label="Vagas", options=[1, 2, 3, 4, 5], key="vagas", horizontal=True)
+        banheiros = st.radio(label="Banheiros", options=[1, 2, 3, 4, 5], key="banheiros", horizontal=True)
+
+    with st.container(border=True, key="container 4"):
+        iptu = st.text_input(label="IPTU", key="iptu")
+        condominio = st.text_input(label="Condominio", key="condominio")
+        valor = st.text_input(label="Valor", key="valor")
+        col3, col4 = st.columns([2, 2])
+        with col3:
+            financiamento = st.checkbox(label="Financiamento", key="financiamento")
+        with col4:
+            permuta = st.checkbox(label="Permuta", key="permuta")
+
+    descricao = st.text_area(label="Descrição", key="descricao")
+
+    if st.button(label="Cadastrar", key="cadastrar imovel"):
+        dados_imovel = [cod_imovel, residencial, complemento, responsável, telefone, cep, numero, mar, area, quartos, vagas, banheiros, iptu, condominio, valor, financiamento, permuta, descricao, str(datetime.datetime.today().now())]
+        functions_sheets.create(dados_imovel, pagina=2)
+        st.rerun()
+
+
+def resize_image(image_path, width, height, orientation=None):
+    """Redimensiona e ajusta a orientação de uma imagem."""
+    try:
+        img = Image.open(image_path)
+
+        # Ajusta a orientação, se necessário
+        if orientation == "horizontal":
+            img = img.transpose(Image.Transpose.ROTATE_90)
+        elif orientation == "vertical":
+            img = img.transpose(Image.Transpose.ROTATE_270)
+
+        # Redimensiona a imagem
+        img = img.resize((width, height))
+
+        # Salva a imagem redimensionada em um buffer de bytes
+        buffered = BytesIO()
+        img.save(buffered, format="PNG")
+        return buffered.getvalue()
+    except Exception as e:
+        print(f"Erro ao processar imagem: {e}")
+        return None
 
 

@@ -58,12 +58,11 @@ with st.expander(label="Cadastrar cliente"):
     descricao = st.text_area(label="Descrição")
     data_in = datetime.datetime.today().now()
     data_update = datetime.datetime.today().now()
-    data_agenda = ""
-    st.write("cliente")
+    data_agenda = datetime.datetime.today().now()
     lista = [cod, nome, telefone, bairro, valor, descricao, str(data_in), str(data_update), str(data_agenda)]
     if st.button(label="Cadastrar cliente", key="cadastrar_cliente"):
-        functions_sheets.create(lista)
+        functions_sheets.create(lista, pagina=1)
 
 with st.expander(label="Cadastrar Imóvel"):
-    st.write("Imóvel")
-
+    tab_imoveis = functions_sheets.read(pagina=2)
+    functions.cadastrar_imovel()
