@@ -47,11 +47,6 @@ st.markdown(
 )
 
 
-popover = st.popover(label="Corretor")
-
-with popover:
-    st.page_link(label='Login', page='pages/login.py')
-
 st.divider()
 pesquisa = st.selectbox(label="🔎 Pesquisar por bairro", options=["Aviação", "Ocian", "Mirim"])
 
@@ -59,7 +54,7 @@ pesquisa = st.selectbox(label="🔎 Pesquisar por bairro", options=["Aviação",
 
 df_imoveis = functions_sheets.read(pagina=2)
 
-num_colunas = 2 # Defina o número de colunas desejado
+num_colunas = 3 # Defina o número de colunas desejado
 colunas = st.columns(num_colunas)
 
 for i, imovel in enumerate(df_imoveis):
@@ -99,10 +94,12 @@ for i, imovel in enumerate(df_imoveis):
                     <div style="background-color: white; padding: 10px; width: 25%; font-size:18px; text-align:center"><b>🛏️{imovel["quartos"]}</b></div>
                     <div style="background-color: white; padding: 10px; width: 25%; font-size:18px; text-align:center"><b>🚽{imovel["banheiros"]}</b></div>
                     <div style="background-color: white; padding: 10px; width: 25%; font-size:18px; text-align:center"><b>🚘{imovel["vagas"]}</b></div>
-                    <div style="background-color: white; padding: 10px; width: 25%; font-size:18p; text-align:center"><b>📐{imovel["area"]}</b> </div>
+                    <div style="background-color: white; padding: 10px; width: 25%; font-size:18p; text-align:center"><b>📐{imovel["area"]}m²</b> </div>
                 </div>
             """, unsafe_allow_html=True)
-            st.button(label="Ver informações", use_container_width=True, key=f"button_infsimovel_{cod_imovel}")
+            with st.container(border=True, key=f"pagelink {cod_imovel}"):
+                st.page_link(page=f"pages/imovel_{i}.py", use_container_width=True)
+            # st.button(label="Ver informações", use_container_width=True, key=f"button_infsimovel_{cod_imovel}")
 
 st.divider()
 st.markdown(f"""

@@ -351,6 +351,14 @@ def cadastrar_imovel():
         with col4:
             permuta = st.checkbox(label="Permuta", key="permuta")
 
+    with st.container(border=True, key="container 5"):
+        criar_pasta(f"midia_imove_{cod_imovel}")
+        lista_foto = st.file_uploader(label="Fotos", accept_multiple_files=True, key="fotos")
+        lista_video = st.file_uploader(label="Vídeos", accept_multiple_files=True, key="videos")
+        for i, item in enumerate(lista_foto):
+            img = Image.open(item)
+            img.save(f"midia_imove_{cod_imovel}/fotos/img_{i}")
+
     descricao = st.text_area(label="Descrição", key="descricao")
 
     if st.button(label="Cadastrar", key="cadastrar imovel"):
@@ -382,3 +390,32 @@ def resize_image(image_path, width, height, orientation=None):
         return None
 
 
+def criar_pasta(pasta):
+    # Verifica se a pasta já existe para não dar erro
+    if not os.path.exists(pasta):
+        os.mkdir(pasta)  # Cria a pasta
+        os.mkdir(f"{pasta}/fotos")
+        os.mkdir(f"{pasta}/videos")
+        print(f"Pasta '{pasta}' criada com sucesso!")
+    else:
+        print(f"A pasta '{pasta}' já existe.")
+
+
+# Função para salvar as imagens na pasta especificada
+def salvar_imagens(imagens, pasta='midia_imovel_0', tamanho=(800, 600)):
+    if not os.path.exists(pasta):
+        os.makedirs(pasta)
+    for imagem in imagens:
+        if imagem is not None:
+            caminho_completo = os.path.join(pasta, imagem.name)
+            img = Image.open(imagem)
+            img_resized = img.resize(tamanho)
+            img_resized.save(caminho_completo)
+            st.success(f"Imagem {imagem.name} salva com sucesso em {pasta}!")
+
+
+def true_false(valor):
+    if valor == True:
+        return "Sim"
+    else:
+        return "Não"

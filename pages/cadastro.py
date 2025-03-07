@@ -65,4 +65,56 @@ with st.expander(label="Cadastrar cliente"):
 
 with st.expander(label="Cadastrar Imóvel"):
     tab_imoveis = functions_sheets.read(pagina=2)
-    functions.cadastrar_imovel()
+
+# Upload de imagens pelo Streamlit
+imagens = st.file_uploader("Adicione suas imagens", accept_multiple_files=True, type=['png', 'jpg', 'jpeg'])
+
+# Salvar as imagens redimensionadas
+if imagens:
+    functions.salvar_imagens(imagens, pasta=f"midia_imovel_{cod}/fotos")
+
+
+
+# ___________________________
+# img_list =[{"img": "resize_0.png", "title": "Corretor", "text": "Felipe Carlos", "link": "https://discuss.streamlit.io/t/new-component-react-bootstrap-carousel/46819"},
+#             {"img": "resize_1.png", "title": "Corretor", "text": "Felipe Carlos", "link": "https://discuss.streamlit.io/t/new-component-react-bootstrap-carousel/46819"},
+#             {"img": "resize_2.png", "title": "Corretor", "text": "Felipe Carlos", "link": "https://discuss.streamlit.io/t/new-component-react-bootstrap-carousel/46819"}]
+#
+# st.markdown(
+#     """
+#     <style>
+#     .carousel-item img {
+#         object-fit: fill;
+#         width: 100%;
+#         height: 100%;
+#     }
+#     </style>
+#     """,
+#     unsafe_allow_html=True,
+# )
+#
+# col1, col2, col3 = st.columns([10, 1, 10])
+#
+# with col1:
+#     carousel(items=img_list, container_height=500, width=1, slide=True, fade=True,
+#              controls=True, indicators=False, interval=5000, pause=None, wrap=True, key="0")
+#
+#
+# cep = "11714000"
+# def location(cep):
+#     url_cep = f"https://viacep.com.br/ws/{cep}/json/"
+#     response = requests.get(url_cep)
+#     dados = response.json()
+#
+#     # Inicializa o geocodificador com um user_agent personalizado (obrigatório)
+#     geolocator = Nominatim(user_agent="my_app")
+#
+#     # Insira o endereço desejado
+#     endereco = f"{dados['logradouro']}, 477, {dados['localidade']}, Brasil"
+#
+#     localizacao = geolocator.geocode(endereco)
+#     lat = localizacao.latitude
+#     lon = localizacao.longitude
+#     return {"LAT": [lat], "LON": [lon]}
+#
+# st.map(location(cep), size=100, zoom=14)

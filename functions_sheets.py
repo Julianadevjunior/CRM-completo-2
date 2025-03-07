@@ -50,7 +50,6 @@ def delete(row: int, pagina=int):
 # Exemplo de uso
 # create(["Julia", "maria@email.com", "Ativo"])
 
-print(read())
 
 
 
